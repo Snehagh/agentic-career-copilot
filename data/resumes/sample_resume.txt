@@ -1,0 +1,31 @@
+Siddhartha Ghosh
+MS Computer Science, Penn State University
+
+SKILLS
+- Python (5 years): FastAPI, LangChain, CrewAI, scikit-learn, PyTorch
+- SQL: PostgreSQL, MySQL, query optimization, schema design
+- AWS: EC2, S3, Lambda, SageMaker, RDS
+- Machine Learning: supervised/unsupervised learning, NLP, LLM fine-tuning
+- Agentic AI: multi-agent orchestration, RAG pipelines, tool use
+- Vector Databases: ChromaDB, Pinecone, FAISS
+- APIs: REST design, OpenAPI, authentication, rate limiting
+
+EXPERIENCE
+AI Engineer Intern | TechCorp | Summer 2024
+- Built a RAG pipeline using LangChain + ChromaDB that reduced customer support ticket resolution time by 35%
+- Deployed a FastAPI microservice on AWS Lambda serving 10K+ requests/day
+- Fine-tuned an OpenAI model on domain-specific data, improving task accuracy by 22%
+
+Machine Learning Engineer | DataStartup | 2023
+- Designed and trained a recommendation model with 89% precision at top-5
+- Automated ETL pipeline with Python and AWS Glue, saving 15 hours/week
+- Wrote SQL queries against 500GB PostgreSQL database for feature engineering
+
+EDUCATION
+MS Computer Science | Penn State University | 2024 | GPA 3.8
+BS Computer Science | XYZ University | 2022
+
+PROJECTS
+- Agentic Career Copilot: Multi-agent AI system using CrewAI, FastAPI, ChromaDB, OpenAI
+- LLM Evaluation Framework: Automated eval pipeline using DeepEval with 20+ test cases
+- NLP Resume Parser: Extracted structured data from 10K resumes using spaCy + transformers

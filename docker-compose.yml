@@ -1,0 +1,27 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist ChromaDB and the sentence-transformer model cache between restarts
+      - chroma_data:/app/chroma_db
+      - hf_cache:/root/.cache/huggingface
+    environment:
+      - CHROMA_PERSIST_DIR=/app/chroma_db
+      - LOG_LEVEL=INFO
+      # Uncomment to enable production LLM mode:
+      # - OPENAI_API_KEY=${OPENAI_API_KEY}
+      # - OPENAI_MODEL=gpt-4o-mini
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
+    restart: unless-stopped
+
+volumes:
+  chroma_data:
+  hf_cache:

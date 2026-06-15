@@ -1,0 +1,33 @@
+Job Title: AI Engineer / Applied AI Engineer
+Company: FutureTech AI
+Location: Remote
+
+ABOUT THE ROLE
+We are building next-generation AI products and looking for an AI Engineer to join our team.
+You will design, build, and ship production-grade AI systems including RAG pipelines,
+agentic workflows, and LLM-powered APIs.
+
+MUST-HAVE REQUIREMENTS
+- 2+ years of experience with Python in a production environment
+- Experience building and deploying LLM-based applications (RAG, agents, fine-tuning)
+- Familiarity with vector databases (ChromaDB, Pinecone, Weaviate, or similar)
+- Experience with REST API development (FastAPI or Flask preferred)
+- Strong understanding of prompt engineering and LLM evaluation
+- Experience with cloud platforms (AWS, GCP, or Azure)
+
+NICE TO HAVE
+- Experience with multi-agent frameworks (CrewAI, LangGraph, AutoGen)
+- Knowledge of LLM evaluation frameworks (DeepEval, RAGAS, LangSmith)
+- Contributions to open-source AI projects
+- Experience with ML model training and fine-tuning (LoRA, PEFT)
+- MS or PhD in Computer Science, AI, or related field
+
+RESPONSIBILITIES
+- Build production RAG pipelines from document ingestion through retrieval
+- Design and implement multi-agent systems for complex task automation
+- Create and maintain LLM evaluation frameworks
+- Ship REST APIs that serve AI features at scale
+- Collaborate with product and data teams on AI roadmap
+
+TECH STACK
+Python, FastAPI, OpenAI API, LangChain, ChromaDB, AWS, PostgreSQL, Docker
