@@ -1,5 +1,7 @@
 # Agentic Career Copilot
 
+[![Tests](https://github.com/YOUR_USERNAME/agentic-career-copilot/actions/workflows/test.yml/badge.svg)](https://github.com/YOUR_USERNAME/agentic-career-copilot/actions/workflows/test.yml)
+
 A multi-agent AI system that matches resumes to job descriptions, scores fit, identifies skill gaps, and delivers coaching recommendations — all via a REST API.
 
 **Current mode: local demo.** The RAG pipeline uses real vector search (ChromaDB + sentence-transformers, no API key needed). The agent orchestration layer uses mock LLM responses that mirror a real CrewAI + OpenAI pipeline. See [Upgrade to Production](#upgrade-to-production) to swap in live LLMs.
@@ -219,6 +221,20 @@ _embed_fn = OpenAIEmbeddingFunction(
 cp .env.example .env
 # Add: OPENAI_API_KEY=sk-...
 ```
+
+---
+
+## CI — Automated Testing
+
+Tests run automatically on every push and pull request via GitHub Actions ([`.github/workflows/test.yml`](.github/workflows/test.yml)).
+
+The workflow:
+1. Checks out the code on `ubuntu-latest`
+2. Sets up Python 3.13 with pip caching
+3. Installs all dependencies from `requirements.txt`
+4. Runs `pytest tests/ -v` — the workflow fails if any test fails
+
+To see live results, go to the **Actions** tab of the repository on GitHub.
 
 ---
 
