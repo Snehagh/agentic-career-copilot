@@ -1,6 +1,6 @@
 # Agentic Career Copilot
 
-[![Tests](https://github.com/YOUR_USERNAME/agentic-career-copilot/actions/workflows/test.yml/badge.svg)](https://github.com/YOUR_USERNAME/agentic-career-copilot/actions/workflows/test.yml)
+[![Tests](https://github.com/Snehagh/agentic-career-copilot/actions/workflows/test.yml/badge.svg)](https://github.com/Snehagh/agentic-career-copilot/actions/workflows/test.yml)
 
 A multi-agent AI system that matches resumes to job descriptions, scores fit, identifies skill gaps, and delivers coaching recommendations — all via a REST API.
 
