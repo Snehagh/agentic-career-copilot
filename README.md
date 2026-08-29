@@ -140,6 +140,8 @@ curl -X POST http://localhost:8000/api/v1/evaluate \
 
 ## Project Structure
 
+```
+
 agentic-career-copilot/
 ├── app/
 │   ├── main.py              # FastAPI app entry point
@@ -162,6 +164,7 @@ agentic-career-copilot/
 │   └── test_api.py
 └── requirements.txt
 
+```
 
 ## Run Tests
 ```bash
