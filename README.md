@@ -6,6 +6,8 @@ A multi-agent AI system that matches resumes to job descriptions, scores fit, id
 **How it runs:** The RAG pipeline uses real vector search (ChromaDB + sentence-transformers). The multi-agent orchestration runs on **CrewAI + OpenAI**, and the evaluation layer uses a real **LLM-as-judge**, both activate automatically when an `OPENAI_API_KEY` is set. Without a key, the project falls back to deterministic mock responses so it can be cloned, run, and tested fully offline (no key required).
 
 ## Architecture
+
+```
 ┌─────────────────────────────────────────────────────────┐
 │                    FastAPI REST API                      │
 │  POST /upload/resume   POST /upload/job                 │
@@ -49,6 +51,8 @@ A multi-agent AI system that matches resumes to job descriptions, scores fit, id
           │  heuristic (demo) →        │
           │  OpenAI judge (prod)       │
           └────────────────────────────┘
+
+```
 
 ## Tech Stack
 | Layer | Without API key (offline) | With API key (live) |
