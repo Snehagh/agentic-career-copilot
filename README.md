@@ -1,16 +1,11 @@
 # Agentic Career Copilot
-
-[![Tests](https://github.com/Snehagh/agentic-career-copilot/actions/workflows/test.yml/badge.svg)](https://github.com/Snehagh/agentic-career-copilot/actions/workflows/test.yml)
+![Tests](https://github.com/Snehagh/agentic-career-copilot/actions/workflows/test.yml/badge.svg)
 
 A multi-agent AI system that matches resumes to job descriptions, scores fit, identifies skill gaps, and delivers coaching recommendations — all via a REST API.
 
-**Current mode: local demo.** The RAG pipeline uses real vector search (ChromaDB + sentence-transformers, no API key needed). The agent orchestration layer uses mock LLM responses that mirror a real CrewAI + OpenAI pipeline. See [Upgrade to Production](#upgrade-to-production) to swap in live LLMs.
-
----
+**How it runs:** The RAG pipeline uses real vector search (ChromaDB + sentence-transformers). The multi-agent orchestration runs on **CrewAI + OpenAI**, and the evaluation layer uses a real **LLM-as-judge**, both activate automatically when an `OPENAI_API_KEY` is set. Without a key, the project falls back to deterministic mock responses so it can be cloned, run, and tested fully offline (no key required).
 
 ## Architecture
-
-```
 ┌─────────────────────────────────────────────────────────┐
 │                    FastAPI REST API                      │
 │  POST /upload/resume   POST /upload/job                 │
@@ -54,25 +49,18 @@ A multi-agent AI system that matches resumes to job descriptions, scores fit, id
           │  heuristic (demo) →        │
           │  OpenAI judge (prod)       │
           └────────────────────────────┘
-```
-
----
 
 ## Tech Stack
-
-| Layer | Demo mode | Production mode |
-|---|---|---|
+| Layer | Without API key (offline) | With API key (live) |
+| --- | --- | --- |
 | API | FastAPI + Pydantic | same |
 | Vector store | ChromaDB (local persistent) | same |
-| Embeddings | `all-MiniLM-L6-v2` via sentence-transformers | OpenAI `text-embedding-3-small` |
-| Agent orchestration | Custom sequential orchestrator (mock LLM) | CrewAI + OpenAI GPT-4o |
+| Embeddings | all-MiniLM-L6-v2 via sentence-transformers | OpenAI text-embedding-3-small |
+| Agent orchestration | Deterministic mock fallback | CrewAI + OpenAI |
 | LLM evaluation | Keyword-overlap heuristic | LLM-as-judge via OpenAI |
 | Document parsing | pypdf, python-docx | same |
 
----
-
 ## Quickstart (no API key needed)
-
 ```bash
 # 1. Clone and enter the repo
 git clone <repo-url> && cd agentic-career-copilot
@@ -90,10 +78,14 @@ python scripts/seed.py
 # 5. Start the API
 uvicorn app.main:app --reload
 ```
+Open http://localhost:8000/docs for the interactive Swagger UI.
 
-Open **http://localhost:8000/docs** for the interactive Swagger UI.
-
----
+## Enable live LLMs (optional)
+```bash
+cp .env.example .env
+# Add your key:  OPENAI_API_KEY=sk-...
+```
+With a valid key, agent orchestration (CrewAI + OpenAI), OpenAI embeddings, and the LLM-as-judge evaluator activate automatically. No code changes required.
 
 ## API Endpoints
 
@@ -114,7 +106,6 @@ curl -X POST http://localhost:8000/api/v1/analyze \
   -H "Content-Type: application/json" \
   -d '{"job_title": "AI Engineer"}'
 ```
-
 Returns:
 ```json
 {
@@ -143,11 +134,8 @@ curl -X POST http://localhost:8000/api/v1/evaluate \
   }'
 ```
 
----
-
 ## Project Structure
 
-```
 agentic-career-copilot/
 ├── app/
 │   ├── main.py              # FastAPI app entry point
@@ -169,79 +157,28 @@ agentic-career-copilot/
 │   ├── test_rag.py
 │   └── test_api.py
 └── requirements.txt
-```
 
----
 
 ## Run Tests
-
 ```bash
 pytest tests/ -v
 ```
 
----
-
-## Upgrade to Production
-
-Two functions handle all LLM interaction. Replace them to go live:
-
-**1. Agent LLM — [`app/agents/crew.py`](app/agents/crew.py)**
-
-Replace `_mock_llm_call` with a real OpenAI call:
-```python
-from openai import OpenAI
-client = OpenAI(api_key=settings.openai_api_key)
-
-def _mock_llm_call(role, task, rag_context, prior_context):
-    response = client.chat.completions.create(
-        model=settings.openai_model,
-        messages=[
-            {"role": "system", "content": f"You are a {role}. {prior_context}"},
-            {"role": "user", "content": f"{task}\n\nContext:\n{rag_context}"},
-        ]
-    )
-    return response.choices[0].message.content
-```
-
-Then add `crewai>=1.14.7` and `openai>=2.30.0,<3` to requirements.txt.
-
-**2. Embeddings — [`app/rag/embedder.py`](app/rag/embedder.py)**
-
-Replace `SentenceTransformerEmbeddingFunction` with:
-```python
-from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
-_embed_fn = OpenAIEmbeddingFunction(
-    api_key=settings.openai_api_key,
-    model_name="text-embedding-3-small"
-)
-```
-
-**3. Set env vars**
-```bash
-cp .env.example .env
-# Add: OPENAI_API_KEY=sk-...
-```
-
----
-
 ## CI — Automated Testing
+Tests run automatically on every push and pull request via GitHub Actions (`.github/workflows/test.yml`):
+- Checks out the code on `ubuntu-latest`
+- Sets up Python 3.13 with pip caching
+- Installs all dependencies from `requirements.txt`
+- Runs `pytest tests/ -v` — the workflow fails if any test fails
 
-Tests run automatically on every push and pull request via GitHub Actions ([`.github/workflows/test.yml`](.github/workflows/test.yml)).
-
-The workflow:
-1. Checks out the code on `ubuntu-latest`
-2. Sets up Python 3.13 with pip caching
-3. Installs all dependencies from `requirements.txt`
-4. Runs `pytest tests/ -v` — the workflow fails if any test fails
-
-To see live results, go to the **Actions** tab of the repository on GitHub.
-
----
+See live results in the **Actions** tab of the repository.
 
 ## Skills Demonstrated
-
 - **Agentic AI** — sequential multi-agent pipeline (Resume Analyst → JD Analyst → Match Scorer → Career Coach) with context propagation between agents
 - **RAG** — full pipeline: document ingestion, chunking, local vector embeddings, semantic retrieval from ChromaDB
 - **LLM Evaluation** — LLM-as-judge pattern scoring answer relevancy and faithfulness
 - **FastAPI** — async REST API with Pydantic v2 request/response models, file upload, OpenAPI docs
-- **Python / Software Engineering** — 12-factor config, modular package structure, mocked unit tests, clean upgrade seams
+- **Python / Software Engineering** — 12-factor config, modular package structure, unit tests, clean offline/live seams
+
+## Author
+**Sneha Ghosh** — [Portfolio](https://snehagh.github.io/Snehagh-Portfolio/) · [LinkedIn](https://www.linkedin.com/in/sneha-ghosh08/)
